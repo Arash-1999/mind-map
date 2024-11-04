@@ -69,6 +69,11 @@ Them **Empty Interface** type essentially describe no methods. It has no rules. 
 
 **Note:** `http.HandleFunc` transorms function to interface with `ServeHTTP`.
 
+**Note:** You can only define methods on a type defined in the same package. if you need this there are 2 sultions:
+
+1. make a normal function instead of a method and pass the interface as an argument.
+2. invert the dependency(e.g. import `entity` package in `db` and write a method/function)
+
 ### Configuration
 
 1. cli falgs
@@ -165,3 +170,60 @@ References:
 - [Reddit: Go best practice for accessing database in handlers?](https://www.reddit.com/r/golang/comments/38hkor/go_best_practice_for_accessing_database_in/)
 
 Most web apps will have multiple dependencies that their handle need to access. (e.g. database connection pool, centeralized error handlers, template caches, ...)
+
+### Database
+
+define models
+
+the idea is that we will encapsulate the code for working with sql in a separate package.
+
+create directory for models(e.g. `internal/models/...`). then create model files like this:
+
+```go
+type Entity1 struct {
+    ID int
+    // ...
+}
+
+type Entity1Model struct {
+    // your database instance (e.g. DB *sql.DB)
+}
+
+// define operations like insert, get, delete, ...
+func (m *Entity1Model) Insert () (int, error) {
+    // execute your query on m.DB
+    return 0, nil
+}
+```
+
+##### **Benefits of this structure**
+
+1. separate database logic and http stuffs.
+2. easy initialization and using with dependency Injection
+3. there's the opportunity to create an interface and mock it for unit testing.
+
+### Executing queries
+
+- `DB.Query()` -> select multiple rows
+- `DB.QueryRow()` -> select at msot 1 row
+- `DB.Exec)` -> statement without returen value like (insert delete)
+
+the above functions use prepared statement behind the scenes to help prevent SQL injection.
+In theory, a better approach could be to make use of the `DB.Prepare` method to create your own prepared statement once.
+
+`rows.Scan()`: will automatically convert the raw output from the SQL database to the required native Go types. Usually:
+
+- `CHAR`, `VARCHAR`, `TEXT` map to `string`
+- `BOOLEAN` maps to `bool`
+- `INT` maps to `int`
+- `BIGINIT` maps to int64
+- `DECIMAL`, `NUMERIC` maps to `float`
+- `TIME`, `DATE`, `TIMESTAMP` map to `time.Time`
+
+##### How to check whether an error matches a specific value?
+
+```go
+import "errors"
+
+errors.Is(err, someError)
+```
