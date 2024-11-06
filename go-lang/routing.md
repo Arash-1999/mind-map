@@ -16,4 +16,6 @@ func handlePost(w http.ResponseWriter, r *http.Request) {
 http.HandleFunc("GET /posts/{id}", handlePost)
 ```
 
+**General Syntax:** `[METHOD ][HOST][PATH]`
+
 **Note:** Some routers disallow overlaps; others use the pattern that was registered last. Go has always allowed overlaps, and has chosen the longer pattern regardless of registration order
