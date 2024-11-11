@@ -1,9 +1,14 @@
 # PostgreSQL
 
+Good to Read:
+
+- (Sling Academy: PostgresSQL)[https://www.slingacademy.com/article/postgresql-created-at-and-updated-at-columns/]
+
 ### Case-insensetive query
 
 References:
 
+- (AWS: Manage case-insensitive data in PostgreSQL)[https://aws.amazon.com/blogs/database/manage-case-insensitive-data-in-postgresql/]
 - (Stack overflow: How to make "case-insensitive" query in Postgresql?)[https://stackoverflow.com/questions/7005302/how-to-make-case-insensitive-query-in-postgresql]
 
 ```sql
