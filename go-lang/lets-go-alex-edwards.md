@@ -162,6 +162,11 @@ err := server.ListenAndServe()
 
 **Note:** The server process which handles display of messages usually includes all lower (more severe) levels when display of less severe levels is requested
 
+##### Logging Good Practice
+
+- set log level to DEBUG after a while (2 or 3 days) set INFO or ERROR level.
+- set DEBUG level in test environment and INFO in production environment.
+
 ### Dependency Injection
 
 References:
